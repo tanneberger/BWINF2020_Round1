@@ -1,0 +1,191 @@
+\documentclass[ngerman,ttfont=true]{tudscrmanual}
+\usepackage[utf8]{inputenc}
+
+%==========================================================
+
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{scrlayer-scrpage}
+\usepackage{tikz}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{color}
+\usepackage{textcomp}
+
+
+\setkomafont{section}{\huge\bfseries}
+
+%==========================================================
+
+\pagestyle{scrheadings}
+
+\title{Aufgabe 1\\Wörter aufräumen}
+\author{Tassilo Tanneberger}
+
+\newcommand{\linia}{\rule{\linewidth}{1pt}}
+\makeatletter
+\renewcommand{\maketitle}{\begin{center}
+\Huge \@title\end{center}
+\linia\\
+{\large\@author\hfill\@date\\}}
+
+%==========================================================
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  aboveskip=3mm,
+  belowskip=3mm,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  tabsize=3,
+}
+
+%\lstset{
+%	language=C++,
+%    backgroundcolor=\color{backcolour},   
+%    commentstyle=\color{codegreen},
+%    keywordstyle=\color{magenta},
+%    numberstyle=\tiny\color{codegray},
+%    stringstyle=\color{codepurple},
+%    basicstyle=\ttfamily\footnotesize,
+%    breakatwhitespace=false,         
+%    breaklines=true,                 
+%    captionpos=b,                    
+%    keepspaces=true,                 
+%    numbers=left,                    
+%    numbersep=5pt,                  
+%    showspaces=false,                
+%    showtabs=false, 
+%    frameround=ffff,                 
+%    tabsize=1,
+%    columns=flexible,
+%    showstringspaces=false
+%}
+
+%==========================================================
+
+\begin{document}
+
+\maketitle
+
+
+\section*{Theorie \& Lösungsidee}
+
+Die Grundlegende ist ziemlich simpel wir suchen alle Wörter die zu einem Lückenwort passen raus und sammeln diese in einer Liste das führen wir für jedes Lückenwort aus. Danach beginnen wir mit dem Lückenwort, was die wenigsten möglichen passenden Wörter hat. Wir führen folgenden Schritt für jedes passende Wort aus. Wir löschen das Wort einmal aus den Möglichen Wörtern anderer Lückenwörter, weil das Wort nun genutzt wird. Nun beginnt der Prozess wieder bei der Suche des Lückenwortes mit minimaler anzahl von Auswahlmöglichkeiten.
+
+\paragraph*{Anmerkung zur Mathematischen Formulierung: } $ l $ ist ein Lückenwort aus der Menge aller Lücken Wörter $ L $ und $ w $ ist ein mögliches angegebenes Wort aus $ W $. Die Funktion $ \Psi (l, w) \in \lbrace 0, 1 \rbrace $ trifft eine Aussage darüber ob ein Wort $ w $ zu einen Lückenwort $ l $ zugeordnet werden kann.
+\begin{align*}
+	A(l) &= \lbrace w_i \in W \vert\ \Psi (l, w_i)\ i = (1, \dots, \vert W \vert ) \rbrace \\
+	A(l) \ & \dots \ \textit{Alle Wörter die zu einen gebenen Lückenwort } l \textit{ passen}
+\end{align*}
+
+\noindent Die Funktion $ \Psi (l, w) $ schaut also ob einen gegebenes Wort zu einen gebenen Lückenwort. Die verwendete Syntax für ein Lückenwort ist das ein nicht gesetzter Buchstabe mit einem "\textunderscore "\ gekennzeichnet ist. Die Funktion hinter $ \Psi $ iteriert einfach über die Buchstaben in dem Wort und dem Lückenwort und vergleicht die Buchstaben. Wenn er ein "\textunderscore " \ findet wird der Buchstabe aus $ w $ ignoriert. Nur wenn jeder Buchstabe aus $ w $ mit jedem Symbol aus $ l $ übereinstimmt wird $ 1 $ zurückgegeben. \\
+
+\noindent $ A(l) $ besitzt eine wichtige Rolle da es alle Wörter aussortiert die nicht zu einen geben Lückenwort $ l $ passen. Somit kann man Lückenwörter priorisieren abhängig davon wie viele Wörter noch vorhanden sind die zu dem Lückenwort passen ( $ \vert A(l) \vert $ ). \\
+
+\noindent Nun müssen den Algorithmus nur noch Formal definieren. Ich habe den Algorithmus in zwei Funktionen gespalten die erste Funktion ( Find-Min-Size($W, L$) ) sucht das Lückenwort heraus was die geringste Auswahl an Wörtern hat und somit als nächstes ein Wort zugewiesen bekommt. Die zweite Funktion ( Recursive-Search($W, L, C$) ) generiert über einen Backtracking Ansatz alle möglichen Sätze. 
+
+\begin{algorithm}[H]
+\caption{ Finden möglicher Zuordnungen }
+\label{euclid}
+\begin{algorithmic}[1]
+	\State $ K \dots $ Lösungs Menge
+
+	\Function{Find-Min-Size}{$W, L$}
+	\State $ \lambda \dots \textsc{Min Value}$
+	\State $ I \dots \textsc{Index} $
+	\For{$ i = (1, \dots, \vert L \vert ) $}
+		\If{ $ \vert A( l_i ) \vert < \lambda \land \vert A( l_i ) \vert \neq 0 $ }
+			\State $ \lambda \gets \vert A(l_i) \vert $
+			\State $ I \gets i $
+		\EndIf
+    \EndFor
+    \State \Return { $ I $ }
+	\EndFunction \\
+	
+	\Procedure {Recursive-Search}{$W, L, C $}
+		\State $ I \gets$ Find-Min-Size($ W, L $)
+		
+		\If { $ \vert K_I \vert = 0 $ } \Comment{Abbruch Bedingung}
+			\If{ $  \vert C \vert \leftrightarrow \vert L \vert \land C \not\in K $}
+				\State $ K \gets K \cup \lbrace C \rbrace $ \Comment{Mögliche Lösung gefunden}
+			\EndIf
+			\State \Return
+		\EndIf
+		
+		\For{ $ w \textsc{ in } R_I $}
+			\State $ P \gets W \setminus \lbrace w \rbrace $
+			\State $ C \gets C \cup \lbrace w \rbrace $
+			\State Recursive-Search($P, L, C $)
+			\Comment{ Rekursiver Neuaufruf }
+		\EndFor
+		
+	\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+Nehmen wir ein kleines Beispiel und führen den Algorithmus damit durch.
+
+\begin{itemize}
+	\item Lückenwörter $ L = \lbrace "M \textunderscore h \textunderscore"," \textunderscore \textunderscore \textunderscore \textunderscore \textunderscore ", " \textunderscore \textunderscore \textunderscore \textunderscore " \rbrace$
+	\item Wörter $ W = \lbrace "Meer", "nicht", "Mehr" \rbrace $ 
+\end{itemize}
+
+Es entsteht eine Baumstruktur wir erkennen z.B auch das $ \vert A("\textunderscore \textunderscore \textunderscore \textunderscore ") \vert = 2 $ somit es als letztes Lückenwort ein Wort zugewiesen bekommen. Eine verzweigung entsteht dann wenn der Algorithmus sich nicht sicher ist welches Wort er nun einsetzten soll bedeutet also $ \vert A(l) \vert > 1$. 
+
+\begin{tikzpicture}%[sibling distance=10em,
+  % every node/.style = {shape=rectangle, rounded corners, draw, align=center, top color=white, bottom color=blue!20}]]
+  \node { $ \lbrace \rbrace $ }
+    child { node { $ \lbrace "Mehr" \rbrace$ }
+    child { node {$ \lbrace "Meer", "nicht" \rbrace $}
+    child { node {$ \lbrace "Mehr", "nicht", "Meer" \rbrace $ } } }
+ };
+ 
+   \node[text width=9cm] at (8,0) {$ A("M \textunderscore h \textunderscore") = \lbrace "Mehr" \rbrace $\\$ W = \lbrace "Meer", "nicht", "Mehr" \rbrace $};
+ 
+    \node[text width=9cm] at (8,-1.5) {$ A(" \textunderscore \textunderscore \textunderscore \textunderscore \textunderscore ") = \lbrace "nicht" \rbrace $\\$ W = \lbrace "Meer", "nicht" \rbrace $};
+    
+    \node[text width=9cm] at (8,-3) {$ A(" \textunderscore \textunderscore \textunderscore \textunderscore ") = \lbrace "Meer" \rbrace $\\$ W = \lbrace "Meer"\rbrace $};
+    
+    \node[text width=9cm] at (8,-4.5) {$ W = \lbrace \rbrace $};
+\end{tikzpicture}
+
+\paragraph{Weitere Ideen}
+Für eine besonders Ambitionierte Lösung kann man auch die Funktion $ \Psi $ mit der Levenshtein-Distanz $d(l, w)$ ersetzen. Das würde den Vorteil mit sich bringen das man nicht mehr schaut ob ein gegebens Wort auf ein Lückenwort passt sondern wie ähnlich ein gegebens Wort zu den Lückenwort ist.
+\vspace{0.5cm}
+
+\section*{Implementierung}
+
+Das Program wurde in C++ umgesetzt. Wir werden in diesem Abschnitt uns ausgewählte Quellcodestücke nehmen und etwas genauer betrachten.
+
+\lstset{language=C++}
+\begin{lstlisting}[language=C++]
+unsigned int index = 0;
+unsigned int min_value;
+
+min_value = std::numeric_limits<unsigned int>::max();
+for (unsigned int i = 0; i < possible_words.size(); i++) {
+	if (min_value > possible_words.at(i).size() and not possible_words.at(i).empty()) {
+		min_value = possible_words.at(i).size();
+		index = i;
+	}
+}
+\end{lstlisting}
+
+
+\end{document}
