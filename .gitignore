@@ -30,3 +30,15 @@
 *.exe
 *.out
 *.app
+
+#Jetbrains Stuff
+.idea
+.cmake-build-debug
+.CMakeLists.txt
+
+#Ignoring Tex Stuff
+*.aux
+*.idx
+*.log
+*.gz
+*.xdy

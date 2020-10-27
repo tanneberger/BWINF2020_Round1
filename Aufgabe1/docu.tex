@@ -1,5 +1,6 @@
-\documentclass[ngerman,ttfont=true]{tudscrmanual}
+\documentclass{article}
 \usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
 
 %==========================================================
 
@@ -41,41 +42,41 @@
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
-\lstset{frame=tb,
-  aboveskip=3mm,
-  belowskip=3mm,
-  columns=flexible,
-  basicstyle={\small\ttfamily},
-  numbers=none,
-  numberstyle=\tiny\color{gray},
-  keywordstyle=\color{blue},
-  commentstyle=\color{dkgreen},
-  stringstyle=\color{mauve},
-  breaklines=true,
-  tabsize=3,
-}
-
-%\lstset{
-%	language=C++,
-%    backgroundcolor=\color{backcolour},   
-%    commentstyle=\color{codegreen},
-%    keywordstyle=\color{magenta},
-%    numberstyle=\tiny\color{codegray},
-%    stringstyle=\color{codepurple},
-%    basicstyle=\ttfamily\footnotesize,
-%    breakatwhitespace=false,         
-%    breaklines=true,                 
-%    captionpos=b,                    
-%    keepspaces=true,                 
-%    numbers=left,                    
-%    numbersep=5pt,                  
-%    showspaces=false,                
-%    showtabs=false, 
-%    frameround=ffff,                 
-%    tabsize=1,
-%    columns=flexible,
-%    showstringspaces=false
+%\lstset{frame=tb,
+%  aboveskip=3mm,
+%  belowskip=3mm,
+%  columns=flexible,
+%  basicstyle={\small\ttfamily},
+%  numbers=none,
+%  numberstyle=\tiny\color{gray},
+%  keywordstyle=\color{blue},
+%  commentstyle=\color{dkgreen},
+%  stringstyle=\color{mauve},
+%  breaklines=true,
+%  tabsize=3,
 %}
+
+\lstset{
+	language=C++,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showtabs=false, 
+    frameround=ffff,                 
+    tabsize=3,
+    columns=flexible,
+    showstringspaces=false
+}
 
 %==========================================================
 
@@ -186,6 +187,6 @@ for (unsigned int i = 0; i < possible_words.size(); i++) {
 	}
 }
 \end{lstlisting}
-
+Ist die umsetzung der Funktion $Find-Min-Size(W, L)$ die aus dem Pseudo-Code bekannt ist. Wir benötigen zwei Variablen einmal einen \verb| index | welcher Speichert welches Lückenwort als nächstes besetzt werden muss und die Variable \verb| min_value | die Aussagt wie viele Wörter in das Lückenwort passen welches durch \verb| index | referenziert wird.
 
 \end{document}
