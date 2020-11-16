@@ -5,10 +5,9 @@
 __version__ = "0.1"
 __author__ = "Eric Wolf"
 
-import json
+from json import load as json_load
 from abc import ABC, abstractmethod
 from random import random
-from argparse import ArgumentParser
 from typing import NamedTuple, Iterable, Iterator
 
 
@@ -90,7 +89,7 @@ class MatchNode(TournamentNode):
         marbles = player0.strength + player1.strength
         wins0, wins1 = 0, 0
         for _ in range(self.rounds):
-            if random() < player0.strength / marbles:
+            if random() < player0.strength / marbles:   # nosecurity
                 wins0 += 1
             else:
                 wins1 += 1
@@ -98,34 +97,40 @@ class MatchNode(TournamentNode):
             return player_index0
         elif wins0 < wins1:
             return player_index1
-        else:               # Gleichstand
+        else:                                           # Gleichstand
             return min(player_index0, player_index1)    # kleinste Nummer gewinnt, wenn beide Spieler die gleiche Nummer haben ist es egal welchen wir auswählen
 
 
-parser = ArgumentParser(description="BWINF Aufgabe 3")
-parser.add_argument("players", help="Pfad zu einer Spielerdatei", type=str)
-parser.add_argument("repetitions", help="Anzahl der Wiederholungen jedes Turniers", type=int)
-parser.add_argument("plan", help="Pfad zu einem Turnierplan", type=str, nargs="*")
-parser.add_argument("-v", "--version", help="zeige Versionsnummer", action="version", version=__version__)
-args = parser.parse_args()
+def parse_node(json) -> TournamentNode:
+    """erstelle ein Turnier aus einer geparsten JSON Datei"""
+    if json["type"] == "Match":
+        return MatchNode(
+            json["rounds"],
+            parse_node(json["player0"]),
+            parse_node(json["player1"])
+        )
+    elif json["type"] == "Player":
+        return PlayerNode(json["number"])
+    else:
+        raise ValueError("Unbekannter Node")
 
-with open(args.players, "r") as fd:
-    players = Players([Player(int(line.rstrip())) for line in fd])
 
-print(players, players.strongest)   # DEBUG
+if __name__ == "__main__":
+    from argparse import ArgumentParser
 
-match = MatchNode(  # TODO: JSON Parser
-    5,
-    MatchNode(
-        5,
-        PlayerNode(1),
-        PlayerNode(2)
-    ),
-    MatchNode(
-        5,
-        PlayerNode(3),
-        PlayerNode(4)
-    )
-)
+    parser = ArgumentParser(description="BWINF Aufgabe 3")
+    parser.add_argument("players", help="Pfad zu einer Spielerdatei", type=str)
+    parser.add_argument("repetitions", help="Anzahl der Wiederholungen jedes Turniers", type=int)
+    parser.add_argument("plan", help="Pfad(e) zu einem Turnierplan", type=str, nargs="*")
+    parser.add_argument("-v", "--version", help="zeige Versionsnummer", action="version", version=__version__)
+    args = parser.parse_args()
 
-print(match.simulate(players))  # DEBUG
+    with open(args.players, "r") as fd:
+        players = Players([Player(int(line.rstrip())) for line in fd])
+
+    print(players, players.strongest)   # DEBUG
+
+    for path in args.plan:              # TODO
+        with open(path, "r") as fd:
+            tournament = parse_node(json_load(fd))
+        print(tournament.simulate(players))
