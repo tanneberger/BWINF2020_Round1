@@ -129,11 +129,13 @@ if __name__ == "__main__":
         length = int(fd.readline().rstrip())
         players = Players([Player(int(line.rstrip())) for line in fd])
         if length != len(players):
-            raise ValueError("Spileranzahl stimmt nicht überein")
-
-    print(players, players.strongest)   # DEBUG
+            raise ValueError("Spieleranzahl stimmt nicht überein")
 
     for path in args.plan:              # TODO
         with open(path, "r") as fd:
             tournament = parse_node(json_load(fd))
-        print(tournament.simulate(players))
+        wins = 0
+        for _ in range(args.repetitions):
+            if tournament.simulate(players) == players.strongest:
+                wins += 1
+        print(f"{path}: Spieler {players.strongest} siegte {wins} mal in {args.repetitions} Turnieren ({wins / args.repetitions * 100}%)")
