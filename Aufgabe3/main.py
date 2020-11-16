@@ -8,13 +8,21 @@ __author__ = "Eric Wolf"
 from json import load as json_load
 from abc import ABC, abstractmethod
 from random import random
-from typing import NamedTuple, Iterable, Iterator
+from typing import NamedTuple, Iterable, Iterator, Tuple
 
 
 class Player(NamedTuple):
     """Repräsentation eines Spielers"""
 
     strength: int
+
+    def match(self, opponent):
+        """gebe Gewinner einer Runde zurück"""
+        marbles = self.strength + opponent.strength
+        if random() < self.strength / marbles:
+            return self
+        else:
+            return opponent
 
 
 class Players:
@@ -55,6 +63,12 @@ class Players:
             return strongest    # Initialwert wird nie zurückgegeben bei count == 1
         raise ValueError("es gibt keinen stärksten Spieler")
 
+    def matches(self) -> Iterator[Tuple[int, Player, int, Player]]:
+        """Iterator über alle einzigartigen Begegnungen"""
+        for pnumber, player in enumerate(self.players, start=1):
+            for onumber, opponent in enumerate(self.players[pnumber:], start=pnumber + 1):
+                yield pnumber, player, onumber, opponent
+
 
 class TournamentNode(ABC):
     """Repräsentation eines Turniers"""
@@ -86,10 +100,9 @@ class MatchNode(TournamentNode):
         player_index1 = self.player1.simulate(players)
         player0 = players[player_index0]
         player1 = players[player_index1]
-        marbles = player0.strength + player1.strength
         wins0, wins1 = 0, 0
         for _ in range(self.rounds):
-            if random() < player0.strength / marbles:   # nosecurity
+            if player0.match(player1) is player0:
                 wins0 += 1
             else:
                 wins1 += 1
@@ -131,7 +144,7 @@ if __name__ == "__main__":
         if length != len(players):
             raise ValueError("Spieleranzahl stimmt nicht überein")
 
-    for path in args.plan:              # TODO
+    for path in args.plan:
         with open(path, "r") as fd:
             tournament = parse_node(json_load(fd))
         wins = 0
