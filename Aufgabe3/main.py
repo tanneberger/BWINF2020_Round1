@@ -144,6 +144,19 @@ if __name__ == "__main__":
         if length != len(players):
             raise ValueError("Spieleranzahl stimmt nicht überein")
 
+    wins = 0
+    for _ in range(args.repetitions):
+        league_wins = [0] * len(players)
+        for pnumber, player, onumber, opponent in players.matches():
+            if player.match(opponent) is player:
+                league_wins[pnumber - 1] += 1
+            else:
+                league_wins[onumber - 1] += 1
+        max_wins = max(league_wins)
+        if min(number for number, wins in enumerate(league_wins, start=1) if wins == max_wins) == players.strongest:
+            wins += 1
+    print(f"Liga: Spieler {players.strongest} siegte {wins} mal in {args.repetitions} Turnieren ({wins / args.repetitions * 100}%)")
+
     for path in args.plan:
         with open(path, "r") as fd:
             tournament = parse_node(json_load(fd))
