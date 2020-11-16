@@ -1,0 +1,62 @@
+{
+    "type": "Match",
+    "rounds": 1,
+    "player0":  {
+      "type": "Match",
+      "rounds": 1,
+      "player0": {
+        "type": "Match",
+        "rounds": 1,
+        "player0": {
+          "type": "Player",
+          "number": 6
+        },
+        "player1": {
+          "type": "Player",
+          "number": 7
+        }
+      },
+      "player1": {
+        "type": "Match",
+        "rounds": 1,
+        "player0": {
+          "type": "Player",
+          "number": 2
+        },
+        "player1": {
+          "type": "Player",
+          "number": 5
+        }
+      }
+    },
+    "player1": {
+      "type": "Match",
+      "rounds": 1,
+      "player0": {
+        "type": "Match",
+        "rounds": 1,
+        "player0": {
+          "type": "Player",
+          "number": 1
+        },
+        "player1": {
+          "type": "Player",
+          "number": 4
+        }
+      },
+      "player1": {
+        "type": "Match",
+        "rounds": 1,
+        "player0": {
+          "type": "Player",
+          "number": 3
+        },
+        "player1": {
+          "type": "Player",
+          "number": 8
+        }
+      }
+    }
+  }
+    
+  

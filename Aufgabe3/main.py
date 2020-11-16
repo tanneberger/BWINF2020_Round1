@@ -126,7 +126,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     with open(args.players, "r") as fd:
+        length = int(fd.readline().rstrip())
         players = Players([Player(int(line.rstrip())) for line in fd])
+        if length != len(players):
+            raise ValueError("Spileranzahl stimmt nicht überein")
 
     print(players, players.strongest)   # DEBUG
 
