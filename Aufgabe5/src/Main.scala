@@ -20,14 +20,24 @@ object Main {
         return
       }
 
-      val persons: Set[Person] = parse(text).getOrElse({
+      val persons: Set[Person] = parse({println("Layout wird verarbeitet..."); text}).getOrElse({
         println("Das erhaltene Wichtel-Layout ist invalid. Bitte beheben sie den Fehler!")
         Set()
       })
 
-      for((present, person) <- solve(persons).toIndexedSeq.sortBy(_._2.nr)) {
+      println("Geschenke werden verteilt...")
+
+      val result = solve(persons)
+
+      for((present, person) <- result.toIndexedSeq.sortBy(_._2.nr)) {
         println(person.descGerman(present))
       }
+
+      val counts = mutable.HashMap.from(0 to 3 zip Array(0, 0, 0, 0))
+      result.foreachEntry((present, person) => counts.updateWith(person.happiness(present))(i => i.map( _ + 1)))
+
+      println("Insgesamt sind " + counts(3) + " Person(en) glücklich, " + counts(2) + " sind zufrieden, " + counts(1) + " sind knapp dran und " + counts(0) + " sind unzufrieden.")
+
       print("Weiter > ")
     }
   }
