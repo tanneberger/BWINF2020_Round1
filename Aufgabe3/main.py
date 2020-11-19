@@ -16,7 +16,7 @@ class Player(NamedTuple):
 
     strength: int
 
-    def match(self, opponent):
+    def match(self, opponent: "Player") -> "Player":
         """gebe Gewinner einer Runde zurück"""
         marbles = self.strength + opponent.strength
         if random() < self.strength / marbles:
@@ -42,7 +42,7 @@ class Players:
 
     def __getitem__(self, index: int) -> Player:
         if index > 0:
-            return self.players[index - 1]
+            return self.players[index - 1]  # tuple beginnt bei 0
         raise IndexError("Spielernummer kleiner als 1")
 
     def __iter__(self) -> Iterator[Player]:
@@ -50,7 +50,7 @@ class Players:
 
     def get_strongest(self) -> int:
         strongest = 0
-        count = 0
+        count = 0   # sorgt für Fehler bei 0 Spielern
         for index, player in enumerate(self.players, start=1):
             if strongest == 0 or self[strongest] < player:
                 strongest = index
@@ -59,14 +59,14 @@ class Players:
                 count += 1
             else:
                 pass
-        if count == 1:
-            return strongest    # Initialwert wird nie zurückgegeben bei count == 1
+        if count == 1:                  # es gibt nur einen einzigen
+            return strongest            # Initialwert wird nie zurückgegeben bei count == 1
         raise ValueError("es gibt keinen stärksten Spieler")
 
     def matches(self) -> Iterator[Tuple[int, Player, int, Player]]:
         """Iterator über alle einzigartigen Begegnungen"""
         for pnumber, player in enumerate(self.players, start=1):
-            for onumber, opponent in enumerate(self.players[pnumber:], start=pnumber + 1):
+            for onumber, opponent in enumerate(self.players[pnumber:], start=pnumber + 1):  # überspringe bereits gebildete Begegnungen
                 yield pnumber, player, onumber, opponent
 
 
@@ -139,7 +139,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     with open(args.players, "r") as fd:
-        length = int(fd.readline().rstrip())
+        length = int(fd.readline().rstrip())    # .rstrip() entfernt potentielle Zeilenumbrüche
         players = Players([Player(int(line.rstrip())) for line in fd])
         if length != len(players):
             raise ValueError("Spieleranzahl stimmt nicht überein")
@@ -149,11 +149,10 @@ if __name__ == "__main__":
         league_wins = [0] * len(players)
         for pnumber, player, onumber, opponent in players.matches():
             if player.match(opponent) is player:
-                league_wins[pnumber - 1] += 1
+                league_wins[pnumber - 1] += 1   # Listen beginnen im Gegensatz zu Spielern bei 0
             else:
                 league_wins[onumber - 1] += 1
-        max_wins = max(league_wins)
-        if min(number for number, wins in enumerate(league_wins, start=1) if wins == max_wins) == players.strongest:
+        if league_wins.index(max(league_wins)) + 1 == players.strongest:    # index findet den Spieler mit der kleinsten Nummer, index + 1 = Spielernummer
             wins += 1
     print(f"Liga: Spieler {players.strongest} siegte {wins} mal in {args.repetitions} Turnieren ({wins / args.repetitions * 100}%)")
 
