@@ -11,3 +11,13 @@ Jeder erzeugt sich bitte seinen eigenen Entwicklungsbranch worin er machen kann,
 ## Other
 
   - Peer Reviews sind erwünscht feedback kann über den Issues Sektion gebenen werden. 
+  
+## Build
+
+Für Cmake-Projekte
+
+```bash
+    $ mkdir build & cd build
+    $ cmake ..
+    $ make
+```
