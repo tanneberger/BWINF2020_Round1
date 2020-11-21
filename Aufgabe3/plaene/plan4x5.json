@@ -1,0 +1,124 @@
+{
+  "type": "Match",
+  "rounds": 5,
+  "player0":  {
+    "type": "Match",
+    "rounds": 5,
+    "player0": {
+      "type": "Match",
+      "rounds": 5,
+      "player0": {
+        "type": "Match",
+        "rounds": 5,
+        "player0": {
+          "type": "Player",
+          "number": 1
+        },
+        "player1": {
+          "type": "Player",
+          "number": 2
+        }
+      },
+      "player1": {
+        "type": "Match",
+        "rounds": 5,
+        "player0": {
+          "type": "Player",
+          "number": 3
+        },
+        "player1": {
+          "type": "Player",
+          "number": 4
+        }
+      }
+    },
+    "player1": {
+      "type": "Match",
+      "rounds": 5,
+      "player0": {
+        "type": "Match",
+        "rounds": 5,
+        "player0": {
+          "type": "Player",
+          "number": 5
+        },
+        "player1": {
+          "type": "Player",
+          "number": 6
+        }
+      },
+      "player1": {
+        "type": "Match",
+        "rounds": 5,
+        "player0": {
+          "type": "Player",
+          "number": 7
+        },
+        "player1": {
+          "type": "Player",
+          "number": 8
+        }
+      }
+    }
+  },
+  "player1": {
+    "type": "Match",
+    "rounds": 5,
+    "player0": {
+      "type": "Match",
+      "rounds": 5,
+      "player0": {
+        "type": "Match",
+        "rounds": 5,
+        "player0": {
+          "type": "Player",
+          "number": 9
+        },
+        "player1": {
+          "type": "Player",
+          "number": 10
+        }
+      },
+      "player1": {
+        "type": "Match",
+        "rounds": 5,
+        "player0": {
+          "type": "Player",
+          "number": 11
+        },
+        "player1": {
+          "type": "Player",
+          "number": 12
+        }
+      }
+    },
+    "player1": {
+      "type": "Match",
+      "rounds": 5,
+      "player0": {
+        "type": "Match",
+        "rounds": 5,
+        "player0": {
+          "type": "Player",
+          "number": 13
+        },
+        "player1": {
+          "type": "Player",
+          "number": 14
+        }
+      },
+      "player1": {
+        "type": "Match",
+        "rounds": 5,
+        "player0": {
+          "type": "Player",
+          "number": 15
+        },
+        "player1": {
+          "type": "Player",
+          "number": 16
+        }
+      }
+    }
+  }    
+}
