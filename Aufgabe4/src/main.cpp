@@ -8,7 +8,7 @@
 #include <optional>
 #include <memory>
 #include <unordered_set>
-#include "src/graph.hpp"
+#include "graph.hpp"
 
 auto generate_unsigned_int() -> unsigned int{
     std::string num_text;

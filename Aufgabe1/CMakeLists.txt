@@ -3,7 +3,7 @@ project(BWINF2020_Aufgabe1 CXX)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(Aufgabe1
-        main.cpp
-        matcher_class.cpp
-        matcher_class.hpp
+        src/main.cpp
+        src/matcher_class.cpp
+        src/matcher_class.hpp
         )
