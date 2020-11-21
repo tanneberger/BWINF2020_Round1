@@ -45,7 +45,7 @@ void construct_graph(const std::shared_ptr<Graph>& graph, unsigned int edge_coun
         unsigned int vertex_1 = generate_unsigned_int();
 
         if (vertex_0 < vertices.size() or vertex_1 < vertices.size()){
-            graph->add_edge(std::make_pair(vertices.at(vertex_0), vertices.at(vertex_1)));
+            graph->add_edge(make_edge(vertices.at(vertex_0), vertices.at(vertex_1)));
             i++;
         }else{
             std::cout << "Invalid Ids !" << std::endl;
@@ -57,10 +57,12 @@ void input_vertices(std::vector<Vertex>& vertices){
     unsigned int i = 0;
     while (true){
         std::cout << "Vertex: " << i << std::endl;
+        std::cout << "x:";
         auto x_0 = generate_float();
         if (not x_0.has_value()){
             return;
         }
+        std::cout << "y:";
         auto y_0 = generate_float();
         if (not y_0.has_value()){
             return;
@@ -84,6 +86,8 @@ int main(){
 
     std::cout << "Nun geben sie die Knoten der beiden Graphen ein. Diese Knoten bekommen jeweils eine ID die später für die Eingabe der Kanten genutzt wird." << std::endl;
     std::cout << "Es reicht eine präzision von 3 Nachkomma Stellen aus." << std::endl;
+    std::cout << "Kleine Hilfe:" << std::endl;
+    std::cout << "cos(30°) = 0.8661 cos(60°) = 0.5 \nsin(30°) = 0.5 sin(60°) = 0.8661" << std::endl;
     std::vector<Vertex> vertices;
     input_vertices(vertices);
 
@@ -91,6 +95,7 @@ int main(){
     unsigned int i = 0;
     for (const auto& vertex: vertices){
         std::cout << "Vertex: " << i << " x = " << vertex.get_x() << " y = " << vertex.get_y() << std::endl;
+        i++;
     }
 
     std::cout << "Eingabe der Kanten mit hilfe der IDs die gerade für die Knoten vergeben wurden" << std::endl;
@@ -104,34 +109,21 @@ int main(){
     auto edge_count_2 = generate_unsigned_int();
     construct_graph(graph2, edge_count_2, vertices);
 
-   /* graph1->add_edge(std::make_pair(Vertex(0, 0), Vertex(0, 1)));
-    graph1->add_edge(std::make_pair(Vertex(0, 0), Vertex(1, 0)));
-    graph1->add_edge(std::make_pair(Vertex(0, 1), Vertex(1, 0)));
-    graph1->add_edge(std::make_pair(Vertex(0, 1), Vertex(0, 2)));
-    graph1->add_edge(std::make_pair(Vertex(1, 1), Vertex(0, 2)));
+    // Example from the documentation hard coded
+   /* graph1->add_edge(make_edge(Vertex(0, 0), Vertex(1, 0)));
+    graph1->add_edge(make_edge(Vertex(0, 0), Vertex(0, 1)));
+    graph1->add_edge(make_edge(Vertex(0, 1), Vertex(0, 2)));
+    graph1->add_edge(make_edge(Vertex(1, 0), Vertex(0.5, 0.8661)));
+    graph1->add_edge(make_edge(Vertex(0.8661, 1.5), Vertex(0, 1)));
+    graph1->add_edge(make_edge(Vertex(0.8661, 1.5), Vertex(0, 2)));
 
-    graph2->add_edge(std::make_pair(Vertex(0, 0), Vertex(0, 1)));
-    graph2->add_edge(std::make_pair(Vertex(0, 1), Vertex(1, 1)));
-    graph2->add_edge(std::make_pair(Vertex(0, 0), Vertex(1, 1)));
-    graph2->add_edge(std::make_pair(Vertex(1, 1), Vertex(2, 1))); */
+    graph2->add_edge(make_edge(Vertex(0, 0), Vertex(0, 1)));
+    graph2->add_edge(make_edge(Vertex(0, 0), Vertex(0.8661, 0.5)));
+    graph2->add_edge(make_edge(Vertex(0, 1), Vertex(0.8661, 0.5)));
+    graph2->add_edge(make_edge(Vertex(0, 1), Vertex(0.8661, 1.5)));
+    graph2->add_edge(make_edge(Vertex(0.8661, 1.5), Vertex(0, 2)));
+    graph2->add_edge(make_edge(Vertex(0.8661, 0.5), Vertex(0.8661, 1.5))); */
 
-    /*graph1->add_edge(std::make_pair(Vertex(2, 0), Vertex(1, 1)));
-    graph1->add_edge(std::make_pair(Vertex(1, 1), Vertex(0, 2)));
-    graph1->add_edge(std::make_pair(Vertex(0, 2), Vertex(1, 3)));
-    graph1->add_edge(std::make_pair(Vertex(1, 3), Vertex(2, 2)));
-    graph1->add_edge(std::make_pair(Vertex(2, 2), Vertex(3, 3)));
-    graph1->add_edge(std::make_pair(Vertex(3, 3), Vertex(4, 2)));
-    graph1->add_edge(std::make_pair(Vertex(4, 2), Vertex(3, 1)));
-    graph1->add_edge(std::make_pair(Vertex(3, 1), Vertex(2, 0)));
-
-    graph2->add_edge(std::make_pair(Vertex(0, 0), Vertex(0, 1)));
-    graph2->add_edge(std::make_pair(Vertex(0, 0), Vertex(1, 0)));
-    graph2->add_edge(std::make_pair(Vertex(0, 1), Vertex(1, 0)));
-    graph2->add_edge(std::make_pair(Vertex(1, 0), Vertex(2, 0)));
-    graph2->add_edge(std::make_pair(Vertex(2, 0), Vertex(2, 1)));
-    graph2->add_edge(std::make_pair(Vertex(2, 1), Vertex(3, 1)));
-    graph2->add_edge(std::make_pair(Vertex(2, 1), Vertex(1, 3)));
-    graph2->add_edge(std::make_pair(Vertex(1, 3), Vertex(1, 4))); */
 
     if( graph1->size() != graph2->size()){
         std::cout << "Graph1 und Graph2 haben unterschiedlich viele Kanten es ist somit nicht möglich G1 in G2 umzuwandeln !" << std::endl;
@@ -154,10 +146,19 @@ int main(){
     }
 
     graph1->find_ideal_alignment(graph2);
-    graph1->print();
-    auto new_graph = graph1->difference(graph2);
-    std::cout << "Resulting Graph:" << std::endl;
-    new_graph->print();
+    graph1->difference(graph2);
+
+    //graph_1 are edges that need to be moved
+    //graph_2 are edges that need to be placed
+    if(graph1->size() < graph2->size() or graph1->size() > move_counter or graph2->size() > move_counter){
+        std::cout << "Es ist nicht möglich den Streichholzgraphen 1 in den Streichholzgraphen 2 umzuwandeln !" << std::endl;
+        return 0;
+    }
+
+    for (unsigned int i = 0; i < std::min(graph1->size(), graph2->size()); i++){
+        std::cout << "Edge:" << i << " / " << graph1->get_edge(i) << " => " << graph2->get_edge(i) << std::endl;
+    }
+
 
     return 0;
 }

@@ -55,7 +55,7 @@ int main() {
               << std::endl;
     std::string gap_text;
     getline(std::cin, gap_text);
-    gap_text = "_h __, _a_ __r ___e __b___!";
+   // gap_text = "_h __, _a_ __r ___e __b___!";
 
     std::cout << "Dein Eingegebener Lückentext: \"" << gap_text << "\"" << std::endl;
 
@@ -69,23 +69,20 @@ int main() {
     std::cout << "\" \n\n";
     std::vector<std::string> words;
 
-    std::cout << "Dein Lückentext erwartet: " << divided_text.size() << " Wörter" << std::endl;
-    std::cout << "Bitte gegebe nun die Wörter für dein Lückentext ein." << std::endl;
-    std::string temp_word;
-    for (unsigned int i = 0; i < divided_text.size(); i++) {
-        std::cout << "Wort: " << std::to_string(i + 1) << ":" << std::endl;
-        std::getline(std::cin, temp_word);
-        words.push_back(temp_word);
-    }
-    words = {"oh", "arbeit", "eine", "fur", "je", "oh", "was"};
+    std::cout << "Bitte gebe nun alle Wörter die in diesem Text vorkommen ein Wörter durch Whitespaces voneinander trennen" << std::endl;
 
+    std::string word_text;
+    getline(std::cin, word_text);
+    words = split_text(word_text);
+
+    std::cout << "Dein Lückentext erwartet: " << divided_text.size() << " Wörter angegebene Wörter: " << words.size() << std::endl;
     std::cout << "Deine Angegebenen Wörter:" << std::endl;
     std::cout << "[";
     for (const auto &str: words) {
         std::cout << str << ",";
     }
     std::cout << "]\n" << std::endl;
-    std::cout << "Starting Matching ... ";
+    std::cout << "Starting Matching ... \n";
 
     MatcherClass matching_algo(divided_text, words);
     auto state = matching_algo.match();
@@ -94,14 +91,16 @@ int main() {
         std::cout
                 << "Bitte überprüfe deinen Input auf korrekt heit oder UTF-8 Zeichen (nur ASCII Zeichen sind zulässig)"
                 << std::endl;
-        return 1;
+        return failure;
     }
 
     std::vector<std::string> result;
     matching_algo.add_special_symbols(gap_text, result);
 
+    unsigned int i = 0;
     for (const auto &parsed_str : result) {
-        std::cout << "Generierter String:\n" << parsed_str << "\n";
+        std::cout << i << " : " << parsed_str << "\n";
+        i++;
     }
 
     return 0;

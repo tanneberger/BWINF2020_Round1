@@ -17,9 +17,7 @@ Vertex::Vertex(float x, float y) {
 Vertex::~Vertex() = default;
 
 void Vertex::rotate() {
-    float temporary = coordinates_.first;
-    coordinates_.first = -1 * coordinates_.second;
-    coordinates_.second = temporary;
+    rotate_by_degree(1);
 }
 
 void Vertex::rotate_by_degree(unsigned int rot) {
@@ -28,13 +26,12 @@ void Vertex::rotate_by_degree(unsigned int rot) {
     //  sin(r)  cos(r)
     // Afterwards it brings every vector into the first quadrant
 
-    float radians = (M_PI * (rot % 4)) / 2;
+    float radians = (M_PI * (rot % 12)) / 6;
     float x_0 = std::cos(radians), x_1 = std::sin(radians) , y_0 = -1.0 * std::sin(radians), y_1 = std::cos(radians);
     float temporary_x = coordinates_.first;
 
     coordinates_.first = x_0 * temporary_x + y_0 * coordinates_.second;
     coordinates_.second = x_1 * temporary_x + y_1 * coordinates_.second;
-
 }
 
 void Vertex::add_vector(const std::pair<float, float> &coords) {
