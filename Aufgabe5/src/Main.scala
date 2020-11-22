@@ -1,3 +1,5 @@
+import java.net.MalformedURLException
+
 import scala.collection.mutable
 
 object Main {
@@ -12,7 +14,7 @@ object Main {
       val text = try {
         new String(new java.net.URL(userinput).openStream().readAllBytes())
       } catch {
-        case _: Exception => userinput
+        case m: Exception => userinput
       }
 
       if(text.toLowerCase.contains('n')) {
@@ -21,7 +23,7 @@ object Main {
       }
 
       val persons: Set[Person] = parse({println("Layout wird verarbeitet..."); text}).getOrElse({
-        println("Das erhaltene Wichtel-Layout ist invalid. Bitte beheben sie den Fehler!")
+        println("Das erhaltene Wichtel-Layout ist fehlerhaft! Bitte beheben sie den Fehler!")
         Set()
       })
 
