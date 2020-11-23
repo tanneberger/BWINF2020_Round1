@@ -11,7 +11,15 @@ Jeder erzeugt sich bitte seinen eigenen Entwicklungsbranch worin er machen kann,
 ## Other
 
   - Peer Reviews sind erwünscht feedback kann über den Issues Sektion gebenen werden. 
-  
+
+## Contributors 
+
+  - Tassilo Tanneberger (SpartanerSpaten) Aufgabe 1 and Aufgabe 4
+  - Alex Sterneckert (Runux) Aufgabe 2
+  - Eric Wolf (Deric-W) Aufgabe 3
+  - Richard Förster (Phridge) Aufgabe 5
+  - Vincent Eichhorn JuniorAufgabe 2
+ 
 ## Build
 
 Für Cmake-Projekte
